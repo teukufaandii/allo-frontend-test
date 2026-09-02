@@ -35,3 +35,52 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Custom modern dark scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0b0f19;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+
+  &:hover {
+    background: rgba(56, 189, 248, 0.4);
+  }
+}
+
+/* Accessible focus outlines */
+:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .v-btn {
+    letter-spacing: 0.2px;
+  }
+  
+  .rocket-card-hover:hover {
+    transform: none; /* Disable hover lifts on touch viewports */
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+
