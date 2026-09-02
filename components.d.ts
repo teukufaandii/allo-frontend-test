@@ -11,6 +11,8 @@ declare module 'vue' {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LoadingState: typeof import('./src/components/common/LoadingState.vue')['default']
     RocketCard: typeof import('./src/components/catalog/RocketCard.vue')['default']
+    RocketDetailHero: typeof import('./src/components/detail/RocketDetailHero.vue')['default']
+    RocketDetailSpecs: typeof import('./src/components/detail/RocketDetailSpecs.vue')['default']
     RocketImage: typeof import('./src/components/common/RocketImage.vue')['default']
     RocketList: typeof import('./src/components/catalog/RocketList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
