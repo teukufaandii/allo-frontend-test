@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b0f19" />
+      <stop offset="50%" stop-color="#111827" />
+      <stop offset="100%" stop-color="#1f2937" />
+    </linearGradient>
+    <linearGradient id="rocketBody" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#f3f4f6" />
+      <stop offset="50%" stop-color="#ffffff" />
+      <stop offset="100%" stop-color="#d1d5db" />
+    </linearGradient>
+    <linearGradient id="flameGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" />
+      <stop offset="30%" stop-color="#fbbf24" />
+      <stop offset="70%" stop-color="#f97316" />
+      <stop offset="100%" stop-color="#ef4444" stop-opacity="0" />
+    </linearGradient>
+    <linearGradient id="fairingGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e5e7eb" />
+      <stop offset="100%" stop-color="#9ca3af" />
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background Canvas -->
+  <rect width="800" height="600" fill="url(#bgGrad)" />
+
+  <!-- Starfield -->
+  <g fill="#ffffff" opacity="0.6">
+    <circle cx="120" cy="80" r="1.5" />
+    <circle cx="280" cy="140" r="2" opacity="0.8" />
+    <circle cx="680" cy="90" r="1" />
+    <circle cx="720" cy="220" r="2.5" opacity="0.4" />
+    <circle cx="160" cy="380" r="1.5" />
+    <circle cx="230" cy="490" r="2" opacity="0.5" />
+    <circle cx="620" cy="420" r="1.5" />
+    <circle cx="700" cy="510" r="2" />
+    <circle cx="400" cy="70" r="1.5" opacity="0.9" />
+    <circle cx="530" cy="180" r="1" />
+  </g>
+
+  <!-- Nebula / Atmosphere Ring -->
+  <circle cx="400" cy="280" r="180" fill="#3b82f6" opacity="0.04" />
+  <circle cx="400" cy="280" r="130" fill="#6366f1" opacity="0.06" />
+
+  <!-- Rocket Group (Angled Launch) -->
+  <g transform="translate(400, 270) rotate(-45)">
+    <!-- Exhaust Flame -->
+    <path d="M-14 130 Q0 240 0 270 Q0 240 14 130 Z" fill="url(#flameGrad)" filter="url(#glow)" />
+    <path d="M-7 130 Q0 200 0 220 Q0 200 7 130 Z" fill="#ffffff" filter="url(#glow)" />
+
+    <!-- Left & Right Fins -->
+    <path d="M-22 90 L-45 135 L-22 130 Z" fill="#4b5563" />
+    <path d="M22 90 L45 135 L22 130 Z" fill="#374151" />
+
+    <!-- Center Booster Core -->
+    <rect x="-22" y="-90" width="44" height="220" rx="4" fill="url(#rocketBody)" />
+
+    <!-- Interstage & Bands -->
+    <rect x="-22" y="-15" width="44" height="12" fill="#1f2937" />
+    <rect x="-22" y="120" width="44" height="10" fill="#111827" />
+
+    <!-- SpaceX Falcon Grid Fins (Stowed) -->
+    <rect x="-26" y="-75" width="4" height="14" rx="1" fill="#374151" />
+    <rect x="22" y="-75" width="4" height="14" rx="1" fill="#374151" />
+
+    <!-- Payload Fairing (Nosecone) -->
+    <path d="M-22 -90 C-22 -160 0 -195 0 -195 C0 -195 22 -160 22 -90 Z" fill="url(#fairingGrad)" />
+    <line x1="0" y1="-195" x2="0" y2="-90" stroke="#d1d5db" stroke-width="1.5" opacity="0.6" />
+  </g>
+
+  <!-- Placeholder Label -->
+  <text x="400" y="520" text-anchor="middle" fill="#9ca3af" font-family="system-ui, -apple-system, sans-serif" font-size="16" font-weight="500" letter-spacing="2">
+    NO PREVIEW IMAGE AVAILABLE
+  </text>
+</svg>

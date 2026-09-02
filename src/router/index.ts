@@ -1,25 +1,35 @@
 /**
  * router/index.ts
  *
- * Automatic routes for `./src/pages/*.vue`
+ * Client-side routing configuration for SpaceX Rocket Catalog.
+ * Handles automatic routes from `./src/pages/*.vue`, scroll restoration, and error recovery.
  */
 
 // Composables
-import { createRouter, createWebHistory } from 'vue-router/auto'
+import { createRouter, createWebHistory } from 'vue-router'
 import { routes } from 'vue-router/auto-routes'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes,
+  scrollBehavior(_to, _from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { top: 0 }
+  },
 })
 
-// Workaround for https://github.com/vitejs/vite/issues/11804
-router.onError((err, to) => {
-  if (err?.message?.includes?.('Failed to fetch dynamically imported module')) {
+// Workaround for dynamic import failures during chunk updates
+router.onError((err: unknown, to?: { fullPath: string }) => {
+  const errorMsg = err instanceof Error ? err.message : String(err)
+  if (errorMsg.includes('Failed to fetch dynamically imported module')) {
     if (!localStorage.getItem('vuetify:dynamic-reload')) {
       console.log('Reloading page to fix dynamic import error')
       localStorage.setItem('vuetify:dynamic-reload', 'true')
-      location.assign(to.fullPath)
+      if (to?.fullPath) {
+        location.assign(to.fullPath)
+      }
     } else {
       console.error('Dynamic import error, reloading page did not fix it', err)
     }
