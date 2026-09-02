@@ -8,7 +8,7 @@
       >
         <v-col
           cols="12"
-          md="8"
+          md="7"
         >
           <div class="d-flex align-center mb-2">
             <v-chip
@@ -34,29 +34,42 @@
 
         <v-col
           cols="12"
-          md="4"
-          class="text-md-right mt-4 mt-md-0"
+          md="5"
+          class="text-md-right mt-4 mt-md-0 d-flex flex-column align-start align-md-end gap-3"
         >
+          <!-- Quick Stats Pill -->
           <v-sheet
             color="surface"
-            class="pa-4 rounded-lg d-inline-flex align-center border-subtle"
+            class="pa-3 px-4 rounded-lg d-inline-flex align-center border-subtle"
             elevation="0"
           >
             <v-icon
               icon="mdi-rocket"
               color="primary"
-              size="32"
+              size="28"
               class="mr-3"
             />
             <div class="text-left">
-              <div class="text-h5 font-weight-bold text-white">
-                {{ rockets.length }}
+              <div class="text-h6 font-weight-bold text-white line-height-1">
+                {{ totalCount }}
               </div>
               <div class="text-caption text-grey-lighten-1">
-                Active Configurations
+                Total Configurations
               </div>
             </div>
           </v-sheet>
+
+          <!-- Primary Action: Add Custom Rocket Button -->
+          <v-btn
+            color="primary"
+            variant="flat"
+            size="large"
+            prepend-icon="mdi-plus"
+            class="text-none font-weight-bold px-6 text-black rounded-lg shadow-md"
+            @click="isAddDialogOpen = true"
+          >
+            Add Custom Rocket
+          </v-btn>
         </v-col>
       </v-row>
     </section>
@@ -108,17 +121,56 @@
         :rockets="filteredRockets"
       />
     </div>
+
+    <!-- Modal Form: Add Custom Rocket Dialog -->
+    <AddRocketDialog
+      v-model="isAddDialogOpen"
+      @created="handleRocketCreated"
+    />
+
+    <!-- Success Snackbar Notification -->
+    <v-snackbar
+      v-model="snackbarShow"
+      color="surface"
+      location="bottom right"
+      timeout="4000"
+      class="border-subtle"
+    >
+      <div class="d-flex align-center">
+        <v-icon
+          icon="mdi-check-circle"
+          color="success"
+          size="22"
+          class="mr-2"
+        />
+        <div class="text-body-2 text-white">
+          Rocket <strong>{{ createdRocketName }}</strong> created successfully!
+        </div>
+      </div>
+      <template #actions>
+        <v-btn
+          color="primary"
+          variant="text"
+          size="small"
+          @click="snackbarShow = false"
+        >
+          Dismiss
+        </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+import type { Rocket } from '@/models/Rocket'
 import { useRocketCatalog } from '@/composables/useRocketCatalog'
 import LoadingState from '@/components/common/LoadingState.vue'
 import ErrorRetryState from '@/components/common/ErrorRetryState.vue'
 import EmptyState from '@/components/common/EmptyState.vue'
 import RocketFilterBar from '@/components/catalog/RocketFilterBar.vue'
 import RocketList from '@/components/catalog/RocketList.vue'
+import AddRocketDialog from '@/components/catalog/AddRocketDialog.vue'
 
 const {
   rockets,
@@ -135,8 +187,17 @@ const {
   resetFilters,
 } = useRocketCatalog()
 
+const isAddDialogOpen = ref(false)
+const snackbarShow = ref(false)
+const createdRocketName = ref('')
+
 function handleRetry() {
   loadRockets(true)
+}
+
+function handleRocketCreated(rocket: Rocket) {
+  createdRocketName.value = rocket.name
+  snackbarShow.value = true
 }
 
 onMounted(() => {
@@ -162,5 +223,13 @@ onMounted(() => {
 
 .border-subtle {
   border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gap-3 {
+  gap: 12px;
+}
+
+.line-height-1 {
+  line-height: 1;
 }
 </style>
