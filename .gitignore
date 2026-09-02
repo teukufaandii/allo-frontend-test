@@ -20,3 +20,9 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Agent & Specification tooling
+.agents/
+.specify/
+specs/
+skills-lock.json
