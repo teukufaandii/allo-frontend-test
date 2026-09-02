@@ -8,6 +8,7 @@ import { RocketMapper } from '@/mappers/RocketMapper'
 
 const STORAGE_KEY = 'allo_spacex_custom_rockets'
 
+// Shared module-level reactive state (singleton) to preserve data across router navigation
 const apiRockets = ref<Rocket[]>([])
 const customRockets = ref<Rocket[]>([])
 const status = ref<AsyncStatus>('idle')
@@ -88,8 +89,23 @@ export function useRocketCatalog(service: IRocketService = launchLibraryService)
     })
   })
 
+  const totalCount = computed(() => rockets.value.length)
+  const spacexCount = computed(() => apiRockets.value.length)
+  const customCount = computed(() => customRockets.value.length)
+  const hasActiveFilters = computed(() => {
+    return searchQuery.value.trim() !== '' || selectedOrigin.value !== 'all'
+  })
+
   const loading = computed(() => status.value === 'loading')
   const isSuccess = computed(() => status.value === 'success')
+
+  /**
+   * Resets active search query and origin filter to default state.
+   */
+  function resetFilters(): void {
+    searchQuery.value = ''
+    selectedOrigin.value = 'all'
+  }
 
   /**
    * Fetches rocket configurations from remote service and rehydrates custom rockets.
@@ -145,10 +161,15 @@ export function useRocketCatalog(service: IRocketService = launchLibraryService)
     filteredRockets,
     searchQuery,
     selectedOrigin,
+    totalCount,
+    spacexCount,
+    customCount,
+    hasActiveFilters,
     status,
     loading,
     error,
     isSuccess,
+    resetFilters,
     loadRockets,
     addCustomRocket,
     getRocketById,

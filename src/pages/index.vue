@@ -1,7 +1,7 @@
 <template>
   <div class="catalog-page-container">
     <!-- Hero Header Banner -->
-    <section class="hero-section mb-8 py-8 px-4 rounded-xl">
+    <section class="hero-section mb-6 py-8 px-4 px-md-8 rounded-xl">
       <v-row
         align="center"
         justify="space-between"
@@ -27,7 +27,7 @@
             SpaceX Rocket Catalog
           </h1>
 
-          <p class="text-body-1 text-grey-lighten-2 max-w-prose">
+          <p class="text-body-1 text-grey-lighten-2 max-w-prose mb-0">
             Explore orbital launch vehicles, heavy-lift rockets, and custom mission configurations designed for low Earth orbit and deep space exploration.
           </p>
         </v-col>
@@ -76,31 +76,38 @@
       @retry="handleRetry"
     />
 
-    <!-- Async State 3: Success State (Rocket List) -->
-    <template v-else>
-      <div
-        v-if="filteredRockets.length === 0"
-        class="empty-fallback py-12 text-center"
-      >
-        <v-icon
-          icon="mdi-magnify-remove-outline"
-          size="48"
-          color="grey"
-          class="mb-3"
-        />
-        <h3 class="text-h6 font-weight-bold text-white mb-1">
-          No Rockets Found
-        </h3>
-        <p class="text-body-2 text-grey-lighten-1">
-          No launch vehicle configurations match your current inventory.
-        </p>
-      </div>
+    <!-- Async State 3: Success State (Filter Bar + Rocket Grid / Empty State) -->
+    <div
+      v-else
+      class="catalog-content"
+    >
+      <!-- Interactive Filter and Real-Time Search Bar -->
+      <RocketFilterBar
+        v-model:search-query="searchQuery"
+        v-model:selected-origin="selectedOrigin"
+        :total-count="totalCount"
+        :spacex-count="spacexCount"
+        :custom-count="customCount"
+        :has-active-filters="hasActiveFilters"
+        @reset="resetFilters"
+      />
 
+      <!-- Contextual Empty State when 0 rockets match search/filters -->
+      <EmptyState
+        v-if="filteredRockets.length === 0"
+        :show-reset="hasActiveFilters"
+        :message="searchQuery.trim() !== ''
+          ? `No vehicles found matching '${searchQuery}'. Try adjusting your keywords or clearing the filter.`
+          : 'No launch vehicles found for the selected origin category.'"
+        @reset="resetFilters"
+      />
+
+      <!-- Responsive Rocket Grid -->
       <RocketList
         v-else
         :rockets="filteredRockets"
       />
-    </template>
+    </div>
   </div>
 </template>
 
@@ -109,14 +116,23 @@ import { onMounted } from 'vue'
 import { useRocketCatalog } from '@/composables/useRocketCatalog'
 import LoadingState from '@/components/common/LoadingState.vue'
 import ErrorRetryState from '@/components/common/ErrorRetryState.vue'
+import EmptyState from '@/components/common/EmptyState.vue'
+import RocketFilterBar from '@/components/catalog/RocketFilterBar.vue'
 import RocketList from '@/components/catalog/RocketList.vue'
 
 const {
   rockets,
   filteredRockets,
+  searchQuery,
+  selectedOrigin,
+  totalCount,
+  spacexCount,
+  customCount,
+  hasActiveFilters,
   loading,
   error,
   loadRockets,
+  resetFilters,
 } = useRocketCatalog()
 
 function handleRetry() {
